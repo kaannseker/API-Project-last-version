@@ -1,4 +1,5 @@
-﻿using ECommerceApi.Domain.Entities;
+﻿using ECommerceApi.Application.Services;
+using ECommerceApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceApi.Api.Controllers
@@ -7,17 +8,18 @@ namespace ECommerceApi.Api.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private static readonly List<Product> _products = new List<Product>
+        private readonly IProductService _productService;
+
+        public ProductsController(IProductService productService)
         {
-            new Product { Id = 1, Name = "Laptop", Description = "Güçlü bir dizüstü bilgisayar", Price = 15000, Stock = 50 },
-            new Product { Id = 2, Name = "Mouse", Description = "Kablosuz oyuncu mouse'u", Price = 250, Stock = 100 },
-            new Product { Id = 3, Name = "Keyboard", Description = "Mekanik klavye", Price = 750, Stock = 75 }
-        };
+            _productService = productService;
+        }
 
         [HttpGet]
         public IActionResult GetProducts()
         {
-            return Ok(_products);
+            var products = _productService.GetAllProducts();
+            return Ok(products);
         }
     }
 }
