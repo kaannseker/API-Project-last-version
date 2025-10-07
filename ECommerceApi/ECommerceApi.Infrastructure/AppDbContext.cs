@@ -61,7 +61,7 @@ namespace ECommerceApi.Infrastructure
 
             
             modelBuilder.Entity<Order>()
-                .HasMany(o => o.OrderDetails)
+                .HasMany(o => o.Details)
                 .WithOne(od => od.Order)
                 .HasForeignKey(od => od.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
