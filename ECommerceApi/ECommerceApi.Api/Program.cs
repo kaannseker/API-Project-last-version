@@ -2,6 +2,8 @@ using ECommerceApi.Application.Services;
 using ECommerceApi.Infrastructure;
 using ECommerceApi.Infrastructure.Repositories.GenericRepository;
 using Microsoft.EntityFrameworkCore;
+using ECommerceApi.Application.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductPriceService, ProductPriceService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProductHierarchyService, ProductHierarchyService>();
+builder.Services.AddScoped<IShoppingService, ShoppingService>();
+builder.Services.AddScoped<OrderDetailService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

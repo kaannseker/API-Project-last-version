@@ -1,4 +1,5 @@
-﻿using ECommerceApi.Domain.Entities;
+﻿using ECommerceApi.Application.Interfaces;
+using ECommerceApi.Domain.Entities;
 using ECommerceApi.Infrastructure.Repositories.GenericRepository;
 using System;
 using System.Collections.Generic;
