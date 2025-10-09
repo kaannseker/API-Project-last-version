@@ -6,11 +6,11 @@ namespace ECommerceApi.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrderDetailController : ControllerBase
+    public class OrderController : ControllerBase
     {
-        private readonly OrderDetailService _service;
+        private readonly OrderService _service;
 
-        public OrderDetailController(OrderDetailService service)
+        public OrderController(OrderService service)
         {
             _service = service;
         }
@@ -27,16 +27,16 @@ namespace ECommerceApi.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(OrderDetail detail)
+        public async Task<IActionResult> Create(Order detail)
         {
             var created = await _service.AddAsync(detail);
-            return CreatedAtAction(nameof(Get), new { id = created.OrderDetailId }, created);
+            return CreatedAtAction(nameof(Get), new { id = created.OrderId }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, OrderDetail detail)
+        public async Task<IActionResult> Update(int id, Order detail)
         {
-            if (id != detail.OrderDetailId) return BadRequest();
+            if (id != detail.OrderId) return BadRequest();
             var success = await _service.UpdateAsync(detail);
             return success ? NoContent() : NotFound();
         }

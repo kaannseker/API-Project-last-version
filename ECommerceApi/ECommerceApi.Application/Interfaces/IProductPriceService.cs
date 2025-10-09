@@ -5,10 +5,10 @@ namespace ECommerceApi.Application.Interfaces
 {
     public interface IProductPriceService
     {
-        IEnumerable<ProductPrice> GetAllPrices();
-        ProductPrice GetPriceById(int id);
-        void AddPrice(ProductPrice price);
+        Task<IEnumerable<ProductPrice>> GetAllPrices();
+        Task<ProductPrice> GetPriceById(int id);
+        Task AddPrice(ProductPrice price);
         void UpdatePrice(ProductPrice price);
-        void DeletePrice(int id);
+        Task DeletePrice(int id);
     }
 }

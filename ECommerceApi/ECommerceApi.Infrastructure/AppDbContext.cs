@@ -21,7 +21,12 @@ namespace ECommerceApi.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderDetails)
+                .WithOne(od => od.Order)
+                .HasForeignKey(od => od.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(p => p.Id);
@@ -61,7 +66,7 @@ namespace ECommerceApi.Infrastructure
 
             
             modelBuilder.Entity<Order>()
-                .HasMany(o => o.Details)
+                .HasMany(o => o.OrderDetails)
                 .WithOne(od => od.Order)
                 .HasForeignKey(od => od.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);

@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using ECommerceApi.Application.Interfaces;
 using ECommerceApi.Domain.Entities;
 using ECommerceApi.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceApi.Api.Controllers
 {
@@ -9,33 +10,29 @@ namespace ECommerceApi.Api.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IProductService _productService;
 
-        public ProductsController(AppDbContext context)
+        public ProductsController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
-
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _productService.GetAllProductsAsync();
             return Ok(products);
         }
-
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productService.GetProductByIdAsync(id);
             if (product == null)
-            {
                 return NotFound();
-            }
+
             return Ok(product);
         }
-
 
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
@@ -43,11 +40,8 @@ namespace ECommerceApi.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            var createdProduct = await _productService.CreateProductAsync(product);
+            return CreatedAtAction(nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);
         }
 
         [HttpPut("{id:int}")]
@@ -56,16 +50,9 @@ namespace ECommerceApi.Api.Controllers
             if (id != product.Id)
                 return BadRequest("ID uyuşmuyor.");
 
-            var existing = await _context.Products.FindAsync(id);
-            if (existing == null)
+            var success = await _productService.UpdateProductAsync(product);
+            if (!success)
                 return NotFound();
-
-            existing.Name = product.Name;
-            existing.Description = product.Description;
-            existing.Price = product.Price;
-            existing.Stock = product.Stock;
-
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
@@ -73,12 +60,9 @@ namespace ECommerceApi.Api.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var success = await _productService.DeleteProductAsync(id);
+            if (!success)
                 return NotFound();
-
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }

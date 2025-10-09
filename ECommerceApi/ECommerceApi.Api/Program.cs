@@ -21,7 +21,7 @@ builder.Services.AddScoped<IProductPriceService, ProductPriceService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductHierarchyService, ProductHierarchyService>();
 builder.Services.AddScoped<IShoppingService, ShoppingService>();
-builder.Services.AddScoped<OrderDetailService>();
+builder.Services.AddScoped<OrderService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

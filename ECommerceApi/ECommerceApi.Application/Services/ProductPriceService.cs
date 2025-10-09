@@ -14,19 +14,19 @@ namespace ECommerceApi.Application.Services
             _priceRepository = priceRepository;
         }
 
-        public IEnumerable<ProductPrice> GetAllPrices()
+        public async Task<IEnumerable<ProductPrice>> GetAllPrices()
         {
-            return _priceRepository.GetAll();
+            return await _priceRepository.GetAllAsync();
         }
 
-        public ProductPrice GetPriceById(int id)
+        public async Task<ProductPrice> GetPriceById(int id)
         {
-            return _priceRepository.GetById(id);
+            return await _priceRepository.GetByIdAsync(id);
         }
 
-        public void AddPrice(ProductPrice price)
+        public async Task AddPrice(ProductPrice price)
         {
-            _priceRepository.Add(price);
+            await _priceRepository.AddAsync(price);
         }
 
         public void UpdatePrice(ProductPrice price)
@@ -34,9 +34,9 @@ namespace ECommerceApi.Application.Services
             _priceRepository.Update(price);
         }
 
-        public void DeletePrice(int id)
+        public async Task DeletePrice(int id)
         {
-            var entity = _priceRepository.GetById(id);
+            var entity = await _priceRepository.GetByIdAsync(id);
             if (entity != null)
             {
                 _priceRepository.Delete(entity);

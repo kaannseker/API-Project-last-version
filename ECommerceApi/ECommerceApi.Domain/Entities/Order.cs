@@ -8,6 +8,6 @@ public class Order
     public decimal TotalAmount { get; set; }
 
     public virtual User User { get; set; } = null!;
-    public virtual ICollection<OrderDetail> Details { get; set; } = new List<OrderDetail>();
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
 }

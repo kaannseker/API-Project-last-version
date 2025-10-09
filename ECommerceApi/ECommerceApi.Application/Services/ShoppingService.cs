@@ -90,7 +90,7 @@ namespace ECommerceApi.Application.Services
             {
                 UserId = userId,
                 OrderDate = DateTime.Now,
-                Details = basket.Items.Select(i => new OrderDetail
+                OrderDetails = basket.Items.Select(i => new OrderDetail
                 {
                     ProductId = i.ProductId,
                     Quantity = i.Quantity
@@ -107,14 +107,14 @@ namespace ECommerceApi.Application.Services
         public async Task<Order> GetOrderByIdAsync(int orderId)
         {
             return await _context.Orders
-                .Include(o => o.Details)
+                .Include(o => o.OrderDetails)
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
 
         public async Task<IEnumerable<Order>> GetUserOrdersAsync(int userId)
         {
             return await _context.Orders
-                .Include(o => o.Details)
+                .Include(o => o.OrderDetails)
                 .Where(o => o.UserId == userId)
                 .ToListAsync();
         }
