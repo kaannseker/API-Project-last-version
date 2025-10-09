@@ -7,6 +7,7 @@ public class Order
     public DateTime OrderDate { get; set; } = DateTime.Now;
     public decimal TotalAmount { get; set; }
 
-    public User User { get; set; } = null!;
-    public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+    public virtual User User { get; set; } = null!;
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
 }

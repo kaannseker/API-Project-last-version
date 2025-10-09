@@ -8,4 +8,5 @@ public class Basket
 
     public User User { get; set; } = null!;
     public ICollection<BasketItem> BasketItems { get; set; } = new List<BasketItem>();
+    public ICollection<BasketItem> Items { get; set; } = new List<BasketItem>();
 }

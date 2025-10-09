@@ -9,7 +9,6 @@ namespace ECommerceApi.Infrastructure
         {
         }
 
-        
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Basket> Baskets { get; set; }
@@ -22,7 +21,12 @@ namespace ECommerceApi.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderDetails)
+                .WithOne(od => od.Order)
+                .HasForeignKey(od => od.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(p => p.Id);
@@ -31,7 +35,7 @@ namespace ECommerceApi.Infrastructure
                 entity.Property(p => p.Description).HasMaxLength(500);
             });
 
-           
+          
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(u => u.UserId);
@@ -40,20 +44,34 @@ namespace ECommerceApi.Infrastructure
                 entity.Property(u => u.Password).HasMaxLength(200);
             });
 
-            
+           
             modelBuilder.Entity<Basket>(entity =>
             {
                 entity.HasKey(b => b.BasketId);
             });
 
-            
+         
             modelBuilder.Entity<BasketItem>(entity =>
             {
                 entity.HasKey(bi => bi.BasketItemId);
                 entity.Property(bi => bi.UnitPrice).HasColumnType("decimal(18,2)");
             });
 
+         
+            modelBuilder.Entity<Basket>()
+                .HasMany(b => b.BasketItems)
+                .WithOne(bi => bi.Basket)
+                .HasForeignKey(bi => bi.BasketId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderDetails)
+                .WithOne(od => od.Order)
+                .HasForeignKey(od => od.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasKey(o => o.OrderId);
@@ -67,7 +85,7 @@ namespace ECommerceApi.Infrastructure
                 entity.Property(od => od.UnitPrice).HasColumnType("decimal(18,2)");
             });
 
-            
+       
             modelBuilder.Entity<ProductPrice>(entity =>
             {
                 entity.HasKey(pp => pp.ProductPriceId);
@@ -75,14 +93,14 @@ namespace ECommerceApi.Infrastructure
                 entity.Property(pp => pp.DiscountPrice).HasColumnType("decimal(18,2)");
             });
 
-            
+          
             modelBuilder.Entity<ProductStack>(entity =>
             {
                 entity.HasKey(ps => ps.ProductStackId);
                 entity.Property(ps => ps.Location).HasMaxLength(50);
             });
 
-    
+            
             modelBuilder.Entity<ProductHiyerarchy>(entity =>
             {
                 entity.HasKey(ph => ph.ProductHiyerarchyId);
